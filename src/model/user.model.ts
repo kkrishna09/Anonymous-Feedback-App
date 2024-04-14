@@ -25,7 +25,7 @@ export interface User extends Document{
     verifyCode:string,
     verifyCodeExpiry:Date,
     isVerified:boolean,
-    isAcceptimgMessage:boolean,
+    isAcceptingMessage:boolean,
     messages:Message[]
 }
 
@@ -60,7 +60,7 @@ const userSchema:Schema<User> =new  Schema({
         type:Boolean,
         default:false
     },
-    isAcceptimgMessage:{
+    isAcceptingMessage:{
         type:Boolean,
         default:true
     },

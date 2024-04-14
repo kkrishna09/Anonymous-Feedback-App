@@ -8,10 +8,10 @@ export async function POST(request:NextRequest):Promise<NextResponse<ApiResponse
    try {
         await dbConnect()
         const {indentifier,password}=await request.json()
-        const isUser=await UserModel.findOne({$or:[{email:indentifier},{username:indentifier}]})
+        const isUser=await UserModel.findOne({$or:[{email:indentifier,isVerified:true},{username:indentifier,isVerified:true}]})
 
         if(!isUser){
-            return NextResponse.json(
+            return NextResponse.json<ApiResponse>(
                 {
                     success:false,
                     message:"user does not exist with this email or username"
@@ -22,7 +22,7 @@ export async function POST(request:NextRequest):Promise<NextResponse<ApiResponse
         const isPasswordCorrect= await bcrypt.compare(password,isUser._id) 
         
         if(!isPasswordCorrect){
-            return NextResponse.json(
+            return NextResponse.json<ApiResponse>(
                 {
                     success:false,
                     message:"incorrect password"
@@ -35,7 +35,7 @@ export async function POST(request:NextRequest):Promise<NextResponse<ApiResponse
         const token = jwt.sign(tokenData,process.env.TOKEN_SECRET!)
 
 
-        const response= NextResponse.json(
+        const response= NextResponse.json<ApiResponse>(
             {
                 success:true,
                 message:"login successfully"
@@ -47,7 +47,7 @@ export async function POST(request:NextRequest):Promise<NextResponse<ApiResponse
         return response
    } catch (error) {
     console.error("error registering user", error)
-    return NextResponse.json(
+    return NextResponse.json<ApiResponse>(
         {
             success:false,
             message:"failed in login"

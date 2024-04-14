@@ -10,10 +10,12 @@ export async function POST(request:NextRequest):Promise<NextResponse<ApiResponse
     await dbConnect()
     try {
         const {username,email,password} =await request.json()
-        const isUser= await UserModel.findOne({$or:[{email},{username}]})
 
-        if(isUser){
-            return NextResponse.json(
+        // finding a user which exist and also verified
+        const isUserVerifiedExist= await UserModel.findOne({$or:[{email,isVerified:true},{username,isVerified:true}]})
+
+        if(isUserVerifiedExist){
+            return NextResponse.json<ApiResponse>(
                 {
                     success:false,
                     message:"User already exist with these email or username"
@@ -22,34 +24,61 @@ export async function POST(request:NextRequest):Promise<NextResponse<ApiResponse
             )
         }
 
+        const verifyCode=Math.floor(100000+Math.random() * 900000).toString()
+        const verifyCodeExpiry=new Date()
+        verifyCodeExpiry.setHours(verifyCodeExpiry.getHours()+1)
         const salt = await bcrypt.genSalt(10)
         const hashedPassword=await bcrypt.hash(password,salt)
-        const newUser=new UserModel({
-            username,
-            password:hashedPassword,
-            email,
-            // verifyCodeExpiry,
-            // verifyCode,
-        })
+
+        // finding a user which exist but not verified
+
+        const isUser= await UserModel.findOne({$or:[{email,isVerified:false},{username,isVerified:false}]})
+        if(isUser){
+            isUser.email=email
+            isUser.username=username
+            isUser.password=hashedPassword
+            isUser.verifyCode=verifyCode
+            isUser.verifyCodeExpiry=verifyCodeExpiry
+            await isUser.save()
+        }else{
+            const newUser=new UserModel({
+                username,
+                password:hashedPassword,
+                email,
+                verifyCodeExpiry,
+                verifyCode,
+                messages:[],
+            })
+            
+            await newUser.save()
+        }
         
-        await newUser.save()
-        // have to work on otp
-        await SendverificationEmail({email,username,otp:""})
-        const tokenData={userId:newUser._id}
-        const token= jwt.sign(tokenData,process.env.TOKEN_SECRET!)
-        const response=NextResponse.json(
+        
+        const emailResponse =await SendverificationEmail({email,username,otp:verifyCode})
+        if(!emailResponse.success){
+            return NextResponse.json<ApiResponse>(
+                {
+                    success:false,
+                    message:"failed in sending verification code"
+                },
+                {status:500}
+            )
+        }
+        
+        return NextResponse.json<ApiResponse>(
             {
                 success:true,
                 message:"suceesfully signup"
             },
             {status:200}
         )
-        response.cookies.set("token",token,{httpOnly:true})
+        // const tokenData={userId:newUser._id}
+        // const token= jwt.sign(tokenData,process.env.TOKEN_SECRET!)
+        // response.cookies.set("token",token,{httpOnly:true})
         
-        return response
     } catch (error) {
         console.error("error registering user", error)
-        return NextResponse.json(
+        return NextResponse.json<ApiResponse>(
             {
                 success:false,
                 message:"failed in signup"
