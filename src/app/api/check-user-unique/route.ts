@@ -15,8 +15,18 @@ export async function GET(request:NextRequest) {
         const {searchParams}=request.nextUrl
         const queryParams=searchParams.get("username")
         // validation with zod
+        if(!queryParams){
+            return NextResponse.json<ApiResponse>(
+                {
+                    success:false,
+                    message:"invalid parameter"
+                },
+                {status:400}
+            )
+        }
+        const decodeQueryParams=decodeURIComponent(queryParams!)
         const ValidationResult=userValidationSchema.safeParse({
-            queryParams
+            username:decodeQueryParams
         })
 
         console.log(ValidationResult)

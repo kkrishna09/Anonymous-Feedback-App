@@ -2,6 +2,7 @@ import UserModel from "@/model/user.model";
 import dbConnect from "@/lib/db/dbConnect";
 import { NextRequest, NextResponse } from "next/server";
 import { ApiResponse } from "@/types/ApiResponse";
+
 export async function POST(request:NextRequest) {
     await dbConnect()
     try {
@@ -13,15 +14,51 @@ export async function POST(request:NextRequest) {
                     success:false,
                     message:"username is valid"
                 },
+                {status:500}
+            )
+        }
+
+
+        const isCodeValid=user.verifyCode===otp
+        if(!isCodeValid){
+            return NextResponse.json<ApiResponse>(
+                {
+                    success:false,
+                    message:"incorrect OTP"
+                },
+                {status:400}
+            )
+        }
+        const isVerifyCodeExpiry= new Date(user.verifyCodeExpiry)> new Date()
+        if(!isVerifyCodeExpiry){
+            return NextResponse.json<ApiResponse>(
+                {
+                    success:false,
+                    message:"OTP has been expired"
+                },
                 {status:400}
             )
         }
 
-        if(user.verifyCode!=otp){
-
-        }
-    } catch (error) {
+        user.isVerified=true
+        await user.save()
         
+        return NextResponse.json<ApiResponse>(
+            {
+                success:false,
+                message:"OTP verified successfully"
+            },
+            {status:400}
+        )
+
+    } catch (error:any) {
+        console.log("error in checking username", error.message)
+        return NextResponse.json<ApiResponse>(
+            {
+                success:false,
+                message:"error in otp verification"
+            },{status:500}
+        )
     }
     
 }
