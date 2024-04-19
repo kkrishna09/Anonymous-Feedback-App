@@ -1,7 +1,10 @@
-import Image from "next/image";
+'use client'
+import axios from "axios";
 
-export default function Home() {
+
+export default async function Home() {
   return (
+    
     <div>Home page</div>
   );
 }
