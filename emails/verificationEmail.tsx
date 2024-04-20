@@ -37,6 +37,11 @@ export default function VerificationEmail({username,otp}:VeriificationEmailProps
                     If you didn't request this code, please ignore this email
                 </Text>
             </Row>
+            <Row>
+                <Text>
+                   {`${process.env.DOMAIN}otpVerification?username=${username}`}
+                </Text>
+            </Row>
         </Section>
     </Html>
 }

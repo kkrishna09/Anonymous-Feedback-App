@@ -18,7 +18,16 @@ export async function POST(request:NextRequest) {
             )
         }
 
-
+    if(user.isVerified){
+            return NextResponse.json<ApiResponse>(
+                {
+                    success:false,
+                    message:"User already verified"
+                },
+                {status:200}
+            )
+        }
+        
         const isCodeValid=user.verifyCode===otp
         if(!isCodeValid){
             return NextResponse.json<ApiResponse>(
@@ -45,10 +54,10 @@ export async function POST(request:NextRequest) {
         
         return NextResponse.json<ApiResponse>(
             {
-                success:false,
+                success:true,
                 message:"OTP verified successfully"
             },
-            {status:400}
+            {status:200}
         )
 
     } catch (error:any) {
