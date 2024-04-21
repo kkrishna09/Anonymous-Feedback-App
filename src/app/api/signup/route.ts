@@ -1,7 +1,7 @@
 import { SendverificationEmail } from "@/helpers/sendVerificationEmail"
 import dbConnect from "@/lib/db/dbConnect"
 import UserModel from "@/model/user.model"
-import { signUpSchema } from "@/schemas/signUpSchema"
+
 import { ApiResponse } from "@/types/ApiResponse"
 import bcrypt from 'bcryptjs'
 import { NextRequest, NextResponse } from "next/server"
