@@ -1,5 +1,5 @@
 "use client"
-import React from 'react';
+import React, { useState } from 'react';
  import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -16,9 +16,17 @@ import {
 import { Input } from "@/components/ui/input"
 import { signUpSchema } from '@/schemas/signUpSchema';
 import Link from 'next/link';
+import axios from 'axios';
+import { ApiResponse } from '@/types/ApiResponse';
+import { useToast } from '@/components/ui/use-toast';
+import { useRouter } from 'next/navigation';
+import { Loader2 } from 'lucide-react';
 
 
 function signIn(){
+    const [loading,setLoading]=useState(false)
+    const { toast } = useToast()
+    const router=useRouter()
     // 1. Define your form.
   const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
@@ -30,9 +38,20 @@ function signIn(){
   })
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof signUpSchema>) {
-
-    console.log(values)
+  async function onSubmit(values: z.infer<typeof signUpSchema>) {
+    setLoading
+    try {
+        const {data:res}=await axios.post<ApiResponse>("/api/sign-up",values)
+        toast({
+            title:res.success?"Successful":"Failed",
+            description:res.message
+        })
+        if(res.success){
+            router.replace(`/otpVerification?username=${values.username}`)
+        }
+    } catch (error) {
+        console.log(error)
+    }
   }
   return (
     <div className='p-5 bg-white border border-var(--border)  absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'>
@@ -80,7 +99,7 @@ function signIn(){
                     </FormItem>
                 )}
                 />
-                <Button type="submit" className=" bg-black text-white border border-white py-3 rounded-md hover:bg-white hover:border-black hover:text-black transition duration-300">Submit</Button>
+                <Button type="submit" className=" bg-black text-white border border-white py-3 rounded-md hover:bg-white hover:border-black hover:text-black transition duration-300">{loading? <Loader2 />:"Submit"} </Button>
                 <FormDescription className="text-center">
                 Already have an account? <Link className="text-blue-500" href={"http://localhost:3000/sign-in"}>Sign In</Link>
                 </FormDescription>
