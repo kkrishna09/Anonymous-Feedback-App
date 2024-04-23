@@ -69,7 +69,7 @@ export default function otpVerification() {
         Submit
     </Button>
     </div>
-    <div className='mt-4'>Did't Sign Up yet? <Link className="text-blue-500" href={"http://localhost:3000/sign-in"}>Sign In</Link></div>
+    <div className='mt-4'>Did't Sign Up yet? <Link className="text-blue-500" href={"http://localhost:3000/sign-up"}>Sign Up</Link></div>
     </div>
   )
 }
