@@ -21,15 +21,15 @@ export async function GET(request:NextRequest) {
                     success:false,
                     message:"invalid parameter"
                 },
-                {status:400}
+                {status:200}
             )
         }
         const decodeQueryParams=decodeURIComponent(queryParams!)
+        // axios validation of schema
         const ValidationResult=userValidationSchema.safeParse({
             username:decodeQueryParams
         })
 
-        console.log(ValidationResult)
 
         if (!ValidationResult.success){
             const usernameError=ValidationResult.error.format().username?._errors|| []
@@ -38,7 +38,7 @@ export async function GET(request:NextRequest) {
                     success:false,
                     message:usernameError?.length>0 ? usernameError.join(", "):"invalid query parameter"
                 },
-                {status:400}
+                {status:200}
             )
         }
 
@@ -53,15 +53,15 @@ export async function GET(request:NextRequest) {
                     success:false,
                     message:"Username already exist"
                 },
-                {status:400}
+                {status:200}
             )
         }
         return NextResponse.json<ApiResponse>(
             {
                 success:true,
-                message:"go further"
+                message:"Unique Username"
             },
-            {status:400}
+            {status:200}
         )
     } catch (err:any) {
         console.log("error in checking username", err)
