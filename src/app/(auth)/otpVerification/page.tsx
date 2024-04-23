@@ -7,17 +7,18 @@ import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp"
 import axios from 'axios'
 import { useToast } from '@/components/ui/use-toast'
 import { ApiResponse } from '@/types/ApiResponse'
-import { cn } from '@/lib/utils'
+
 import Link from 'next/link'
 
+import { useRouter, useSearchParams } from 'next/navigation'
+
+
 export default function otpVerification() {
-    let username="";
+
     const {toast}=useToast()
-    const queryString = window.location.search; 
-    if(queryString){
-        const urlParams = new URLSearchParams(queryString); 
-        username = urlParams.get('username') || ""
-    }
+    const router= useRouter()
+    const searchparams= useSearchParams()
+    const username = searchparams.get("username") || ""
     
     const [otpData,setOtpData]=useState({
         otp:"",
@@ -33,7 +34,9 @@ export default function otpVerification() {
                 title:res.success?"Successful":"Failed",
                 description:res.message
             })
-            
+            if(res.success){
+                router
+            }
         } catch (error) {
             
         }
