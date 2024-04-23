@@ -25,12 +25,11 @@ import { cn } from '@/lib/utils';
 
 let count=0
 function signIn(){
-    count++
-    console.log(count/2)
-    const [isUsernameUnique,setIsUsernameUnique]=useState({
-        unique:false,
-        message:""
-    })
+    console.log(count)
+    // const [isUsernameUnique,setIsUsernameUnique]=useState({
+    //     unique:false,
+    //     message:""
+    // })
     const [loading,setLoading]=useState(false)
     const { toast } = useToast()
     const router=useRouter()
@@ -44,33 +43,22 @@ function signIn(){
         },
     })
 
-    // debounce function
-    const debounce = <T extends Function>(func: T, delay: number) => {
-        let timeout: ReturnType<typeof setTimeout>;
-
-        return function (this: any, ...args: any[]) {
-            clearTimeout(timeout);
-            timeout = setTimeout(() => func.apply(this, args), delay);
-        };
-    };
-
-
-    const uniqueUsername = async (username:string)=>{
-        if(username.length>6){
-            try {
-                const {data}=await axios.get<ApiResponse>(`/api/check-user-unique?username=${username}`)
-                setIsUsernameUnique({unique:data.success,message:data.message})
-            } catch (error) {
-                console.log("error in check-user-unique debounce",error)
-            }
-        }else{
-            setIsUsernameUnique({unique:false,message:""})
-        }
-    }
-    const debouncedFunc=debounce(uniqueUsername,800)
-    document.getElementById("username")?.addEventListener("input",(e:any)=>{
-        debouncedFunc(e.target.value)
-    })
+    // const uniqueUsername = async (username:string)=>{
+    //     if(username.length>6){
+    //         try {
+    //             const {data}=await axios.get<ApiResponse>(`/api/check-user-unique?username=${username}`)
+    //             setIsUsernameUnique({unique:data.success,message:data.message})
+    //         } catch (error) {
+    //             console.log("error in check-user-unique debounce",error)
+    //         }
+    //     }else{
+    //         setIsUsernameUnique({unique:false,message:""})
+    //     }
+    // }
+    // const debouncedFunc=debounce(uniqueUsername,800)
+    // document.getElementById("username")?.addEventListener("input",(e:any)=>{
+    //     debouncedFunc(e.target.value)
+    // })
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof signUpSchema>) {
@@ -104,9 +92,9 @@ function signIn(){
                     <FormControl>
                         <Input type='text' placeholder="Username" {...field} id="username"  className="input-field" />
                     </FormControl>
-                    <FormMessage className={cn(isUsernameUnique.unique?"text-blue-500":"text-red-500")}>
+                    {/* <FormMessage className={cn(isUsernameUnique.unique?"text-blue-500":"text-red-500")}>
                        {isUsernameUnique.message}
-                    </FormMessage>
+                    </FormMessage> */}
                     <FormMessage  about='username'/>
                     </FormItem>
                 )}

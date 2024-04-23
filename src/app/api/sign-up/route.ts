@@ -20,7 +20,7 @@ export async function POST(request:NextRequest):Promise<NextResponse<ApiResponse
                     success:false,
                     message:"User already exist with these email or username"
                 },
-                {status:400}
+                {status:200}
             )
         }
 
@@ -61,7 +61,7 @@ export async function POST(request:NextRequest):Promise<NextResponse<ApiResponse
                     success:false,
                     message:"failed in sending verification code"
                 },
-                {status:500}
+                {status:200}
             )
         }
         
