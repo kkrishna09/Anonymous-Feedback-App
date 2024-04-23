@@ -1,14 +1,15 @@
 'use client'
 import React, { LegacyRef, useRef, useState } from 'react'
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot,} from "@/components/ui/input-otp"
-import { Loader2 } from "lucide-react"
  
 import { Button } from "@/components/ui/button"
 import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp"
 import axios from 'axios'
+import { useToast } from '@/components/ui/use-toast'
+import { ApiResponse } from '@/types/ApiResponse'
 
 export default function otpVerification() {
-    
+    const {toast}=useToast()
     const queryString = window.location.search; 
     const urlParams = new URLSearchParams(queryString); 
     const username = urlParams.get('username')
@@ -17,11 +18,16 @@ export default function otpVerification() {
         username
     })
     const handleSubmit=async()=>{
-        
         try {
 
-            const res =await axios.post(`http://localhost:3000/api/otpVerification`,otpData)
+            const {data:res} =await axios.post<ApiResponse>(`http://localhost:3000/api/otpVerification`,otpData)
             console.log(res)
+
+            toast({
+                title:res.success?"Successful":"Failed",
+                description:res.message
+            })
+            
         } catch (error) {
             
         }
