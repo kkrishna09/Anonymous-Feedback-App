@@ -22,6 +22,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { debounce } from '@/helpers/debounce';
 
 let count=0
 function signIn(){
@@ -43,22 +44,25 @@ function signIn(){
         },
     })
 
-    // const uniqueUsername = async (username:string)=>{
-    //     if(username.length>6){
-    //         try {
-    //             const {data}=await axios.get<ApiResponse>(`/api/check-user-unique?username=${username}`)
-    //             setIsUsernameUnique({unique:data.success,message:data.message})
-    //         } catch (error) {
-    //             console.log("error in check-user-unique debounce",error)
-    //         }
-    //     }else{
-    //         setIsUsernameUnique({unique:false,message:""})
-    //     }
-    // }
-    // const debouncedFunc=debounce(uniqueUsername,800)
-    // document.getElementById("username")?.addEventListener("input",(e:any)=>{
-    //     debouncedFunc(e.target.value)
-    // })
+    const uniqueUsername = async (e:any)=>{
+        const username:string=e.target.value
+        console.log(username)
+        // if(username.length>6){
+        //     try {
+        //         console.log("hhh")
+        //         const {data}=await axios.get<ApiResponse>(`/api/check-user-unique?username=${username}`)
+        //         setIsUsernameUnique({unique:data.success,message:data.message})
+        //     } catch (error) {
+        //         console.log("error in check-user-unique debounce",error)
+        //     }
+        // }else{
+        //     setIsUsernameUnique({unique:false,message:""})
+        // }
+    }
+
+
+    const debounced= debounce(uniqueUsername,500)
+    document.getElementById("username")?.addEventListener("input",debounced)
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof signUpSchema>) {
