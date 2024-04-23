@@ -26,6 +26,7 @@ import { debounce } from '@/helpers/debounce';
 
 let count=0
 function signIn(){
+    count++
     console.log(count)
     const [isUsernameUnique,setIsUsernameUnique]=useState({
         unique:false,
@@ -34,6 +35,7 @@ function signIn(){
     const [loading,setLoading]=useState(false)
     const { toast } = useToast()
     const router=useRouter()
+
     // 1. Define your form.
     const form = useForm<z.infer<typeof signUpSchema>>({
         resolver: zodResolver(signUpSchema),
@@ -139,7 +141,7 @@ function signIn(){
                     </FormItem>
                 )}
                 />
-                <Button disabled={isUsernameUnique.unique?true:false} type="submit" className=" bg-black text-white border border-white py-3 rounded-md hover:bg-white hover:border-black hover:text-black transition duration-300">{loading? <Loader2 />:"Submit"} </Button>
+                <Button disabled={!isUsernameUnique.unique } type="submit" className=" bg-black text-white border border-white py-3 rounded-md hover:bg-white hover:border-black hover:text-black transition duration-300">{loading? <Loader2 />:"Submit"} </Button>
                 <FormDescription className="text-center">
                 Already have an account? <Link className="text-blue-500" href={"http://localhost:3000/sign-in"}>Sign In</Link>
                 </FormDescription>
