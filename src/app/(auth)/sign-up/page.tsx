@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
  import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -27,10 +27,10 @@ import { debounce } from '@/helpers/debounce';
 let count=0
 function signIn(){
     console.log(count)
-    // const [isUsernameUnique,setIsUsernameUnique]=useState({
-    //     unique:false,
-    //     message:""
-    // })
+    const [isUsernameUnique,setIsUsernameUnique]=useState({
+        unique:false,
+        message:""
+    })
     const [loading,setLoading]=useState(false)
     const { toast } = useToast()
     const router=useRouter()
@@ -43,26 +43,36 @@ function signIn(){
         password: "",
         },
     })
+    
 
-    const uniqueUsername = async (e:any)=>{
-        const username:string=e.target.value
-        console.log(username)
-        // if(username.length>6){
-        //     try {
-        //         console.log("hhh")
-        //         const {data}=await axios.get<ApiResponse>(`/api/check-user-unique?username=${username}`)
-        //         setIsUsernameUnique({unique:data.success,message:data.message})
-        //     } catch (error) {
-        //         console.log("error in check-user-unique debounce",error)
-        //     }
-        // }else{
-        //     setIsUsernameUnique({unique:false,message:""})
-        // }
+    const {watch}=form
+    
+
+
+    const uniqueUsername = async (username:string)=>{
+        if(username.length>6){
+            try {
+                const {data}=await axios.get<ApiResponse>(`/api/check-user-unique?username=${username}`)
+                setIsUsernameUnique({unique:data.success,message:data.message})
+            } catch (error) {
+                console.log("error in check-user-unique debounce",error)
+            }
+        }else{
+            setIsUsernameUnique({unique:false,message:""})
+        }
     }
-
-
     const debounced= debounce(uniqueUsername,500)
-    document.getElementById("username")?.addEventListener("input",debounced)
+
+    useEffect(()=>{
+        const subscription=watch((values:any)=>{
+            if(values?.username?.length>6){
+                debounced(values.username)
+            }
+        })
+        return ()=> subscription.unsubscribe()
+    },[watch])
+
+
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof signUpSchema>) {
@@ -94,11 +104,11 @@ function signIn(){
                     <FormItem>
                     <FormLabel>Username</FormLabel>
                     <FormControl>
-                        <Input type='text' placeholder="Username" {...field} id="username"  className="input-field" />
+                        <Input type='text' placeholder="Username" {...field}  className="input-field" />
                     </FormControl>
-                    {/* <FormMessage className={cn(isUsernameUnique.unique?"text-blue-500":"text-red-500")}>
+                    <FormMessage className={cn(isUsernameUnique.unique?"text-blue-500":"text-red-500")}>
                        {isUsernameUnique.message}
-                    </FormMessage> */}
+                    </FormMessage>
                     <FormMessage  about='username'/>
                     </FormItem>
                 )}
@@ -110,7 +120,7 @@ function signIn(){
                     <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                        <Input type='email' placeholder="Email" {...field} className="input-field" />
+                        <Input type='email' placeholder="Email" {...field}  className="input-field" />
                     </FormControl>
                     <FormMessage  about='email'/>
                     </FormItem>
@@ -129,7 +139,7 @@ function signIn(){
                     </FormItem>
                 )}
                 />
-                <Button type="submit" className=" bg-black text-white border border-white py-3 rounded-md hover:bg-white hover:border-black hover:text-black transition duration-300">{loading? <Loader2 />:"Submit"} </Button>
+                <Button disabled={isUsernameUnique.unique?true:false} type="submit" className=" bg-black text-white border border-white py-3 rounded-md hover:bg-white hover:border-black hover:text-black transition duration-300">{loading? <Loader2 />:"Submit"} </Button>
                 <FormDescription className="text-center">
                 Already have an account? <Link className="text-blue-500" href={"http://localhost:3000/sign-in"}>Sign In</Link>
                 </FormDescription>
