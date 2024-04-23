@@ -93,10 +93,11 @@ function signIn(){
     }
   }
   return (
-    <div className='p-5 bg-white border border-var(--border)  absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'>
+    <div className='p-5 bg-white border border-var(--border) shadow-md absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'>
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="max-w-md mx-auto space-y-3">
-                <FormDescription className="text-center text-2xl font-bold">
+                <h1 className='text-center  text-black  text-3xl font-bold'>Anonymous-Feedback-App</h1>
+                <FormDescription className="text-center  text-black  text-2xl font-bold">
                 Sign Up
                 </FormDescription>
                 <FormField
