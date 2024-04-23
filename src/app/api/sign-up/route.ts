@@ -1,4 +1,4 @@
-import { SendverificationEmail } from "@/helpers/sendVerificationEmail"
+import { sendverificationEmail} from "@/helpers/sendVerificationEmail"
 import dbConnect from "@/lib/db/dbConnect"
 import UserModel from "@/model/user.model"
 
@@ -54,8 +54,8 @@ export async function POST(request:NextRequest):Promise<NextResponse<ApiResponse
         }
         
         
-        const emailResponse =await SendverificationEmail({email,username,otp:verifyCode})
-        // console.log(emailResponse)
+        const emailResponse =await sendverificationEmail({email,username,otp:verifyCode})
+          console.log(emailResponse)
         if(!emailResponse.success){
             return NextResponse.json<ApiResponse>(
                 {
