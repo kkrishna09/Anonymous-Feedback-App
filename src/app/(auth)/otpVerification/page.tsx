@@ -1,5 +1,5 @@
 'use client'
-import React, { LegacyRef, useRef, useState } from 'react'
+import React, { useState } from 'react'
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot,} from "@/components/ui/input-otp"
  
 import { Button } from "@/components/ui/button"
@@ -35,7 +35,7 @@ export default function otpVerification() {
                 description:res.message
             })
             if(res.success){
-                router
+                router.replace("/send-message")
             }
         } catch (error) {
             
