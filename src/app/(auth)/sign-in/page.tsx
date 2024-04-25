@@ -109,7 +109,7 @@ function signInPage(){
                     </FormItem>
                 )}
                 />
-                <Button disabled={ loading } type="submit" className=" bg-black text-white border border-white py-3 rounded-md hover:bg-white hover:border-black hover:text-black transition duration-300">{loading? <Loader2 className='animate-spin' />:"Submit"} </Button>
+                <Button disabled={ loading } type="submit" className=" bg-black text-white border border-white py-3 rounded-md hover:bg-white hover:border-black hover:text-black transition duration-300">{loading? <Loader2 className='animate-spin' />:"Sign In"} </Button>
                 <FormDescription className="text-center">
                 Don't have an account? <Link className="text-blue-500" href={"http://localhost:3000/sign-up"}>Sign Up</Link>
                 </FormDescription>

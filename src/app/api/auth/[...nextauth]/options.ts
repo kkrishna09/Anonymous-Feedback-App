@@ -41,6 +41,7 @@ export const authOptions:NextAuthOptions={
         }),
     ],
     callbacks:{
+        
         async jwt({ token, user}) {
             if(user){
                 token._id=user._id?.toString();
@@ -57,6 +58,8 @@ export const authOptions:NextAuthOptions={
                 session.user.isAcceptingMessage=token.isAcceptingMessage;
                 session.user.username=token.username;
             }
+
+        
         return session
         },
     },
