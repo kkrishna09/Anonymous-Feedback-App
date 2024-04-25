@@ -5,37 +5,37 @@ import UserModel from "@/model/user.model";
 import bcrypt from 'bcryptjs'
 
 export const authOptions:NextAuthOptions={
-    secret:process.env.NEXT_AUTH_SECRET,
     providers:[
         CredentialsProvider({
             id: "credentials",
             name: "Credentials",
             credentials: {
-                credential: { label: "Credential", type: "text", placeholder: "Email or Username" },
+                
+                identifier: { label: "identifier", type: "text", placeholder: "Email or Username" },
                 password: { label: "Password", type: "password" }
               },
-              async authorize(credential:any):Promise<any>{
+              async authorize(credentials:any):Promise<any>{
                 await dbConnect()
                 try {
                     const user =await UserModel.findOne({
                         $or:[
-                            {email:credential.identifier.email},
-                            {username:credential.identifier.username}
+                            {email:credentials.identifier},
+                            {username:credentials.identifier}
                         ]
                     })
                     if (!user){
-                         throw new Error("user not found")
+                        return  new Error("user not found")
                     }
                     if (user.isVerified){
-                        throw new Error("user is not verified")
+                        return new Error("user is not verified")
                     }
-                    const IsPasswordCorrect=await bcrypt.compare(credential.password,user.password)
-                    if(IsPasswordCorrect){
-                        throw new Error("Password is incorrect")
+                    const IsPasswordCorrect=await bcrypt.compare(credentials.password,user.password)
+                    if(!IsPasswordCorrect){
+                        return new Error("Password is incorrect")
                     }
                     return user
                 } catch (err:any) {
-                    throw new Error(err)
+                    return new Error(err)
                 }
               }
         }),
@@ -60,6 +60,7 @@ export const authOptions:NextAuthOptions={
         return session
         },
     },
+    secret:process.env.NEXT_AUTH_SECRET,
     pages:{
         signIn:'sign-in'
     },

@@ -11,6 +11,7 @@ export async function GET(request:NextRequest) {
     await dbConnect()
     
     const session=await getServerSession(authOptions)
+    console.log("session",session)
     if(!session || !session.user){
         return NextResponse.json<ApiResponse>(
             {

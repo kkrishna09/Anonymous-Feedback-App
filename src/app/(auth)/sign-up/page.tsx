@@ -25,7 +25,7 @@ import { cn } from '@/lib/utils';
 import { debounce } from '@/helpers/debounce';
 
 let count=0
-function signIn(){
+function signUp(){
     count++
     console.log(count)
     const [isUsernameUnique,setIsUsernameUnique]=useState({
@@ -78,18 +78,26 @@ function signIn(){
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof signUpSchema>) {
-    setLoading
+    setLoading(true)
     try {
         const {data:res}=await axios.post<ApiResponse>("/api/sign-up",values)
+        setLoading(false)
         toast({
             title:res.success?"Successful":"Failed",
-            description:res.message
+            description:res.message,
+            variant:res.success?"default":"destructive"
         })
         if(res.success){
             router.replace(`/otpVerification?username=${values.username}`)
         }
     } catch (error) {
+        setLoading(false)
         console.log(error)
+        toast({
+            title:"error ",
+            description:"an error occurred in sign up",
+            variant:"destructive"
+        })
     }
   }
   return (
@@ -142,7 +150,7 @@ function signIn(){
                     </FormItem>
                 )}
                 />
-                <Button disabled={!isUsernameUnique.unique } type="submit" className=" bg-black text-white border border-white py-3 rounded-md hover:bg-white hover:border-black hover:text-black transition duration-300">{loading? <Loader2 />:"Submit"} </Button>
+                <Button disabled={!isUsernameUnique.unique || loading } type="submit" className=" bg-black text-white border border-white py-3 rounded-md hover:bg-white hover:border-black hover:text-black transition duration-300">{loading? <Loader2 className='animate-spin' />:"Submit"} </Button>
                 <FormDescription className="text-center">
                 Already have an account? <Link className="text-blue-500" href={"http://localhost:3000/sign-in"}>Sign In</Link>
                 </FormDescription>
@@ -152,4 +160,4 @@ function signIn(){
   )
 }
 
-export default signIn
+export default signUp
