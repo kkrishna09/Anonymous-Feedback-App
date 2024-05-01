@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils"
 import AuthProvider from "@/context/AuthProvider";
 import { Toaster } from "@/components/ui/toaster"
 import Navbar from "@/components/{my_component)/Navbar";
+import Footer from "@/components/{my_component)/Footer";
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -29,6 +30,7 @@ export default function RootLayout({
           <Navbar/>
         {children}
         <Toaster/>
+        <Footer/>
       </body>
       </AuthProvider>
     </html>
