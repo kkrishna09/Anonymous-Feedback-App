@@ -63,7 +63,7 @@ export async function GET(request:NextRequest) {
             {
                 success:false,
                 message:"Not authenticated"
-            },{status:500}
+            },{status:200}
         )
     }
     const user=session?.user
@@ -79,7 +79,7 @@ export async function GET(request:NextRequest) {
                     success:false,
                     message:"current user not found",
                     messages:[]
-                },{status:401}
+                },{status:200}
             )
         }
 
