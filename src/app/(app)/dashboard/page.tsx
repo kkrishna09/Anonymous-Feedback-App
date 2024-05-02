@@ -3,15 +3,13 @@ import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { Switch } from '@/components/ui/switch'
 import { useToast } from '@/components/ui/use-toast'
-import MessageCard from '@/components/{my_component)/MessageCard'
-import dbConnect from '@/lib/db/dbConnect'
+import MessageCard from '@/components/my_component/MessageCard'
 import { Message } from '@/model/user.model'
 import { acceptMessageSchema } from '@/schemas/AcceptMessageSchema'
 import { ApiResponse } from '@/types/ApiResponse'
 import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
 import { Loader2, RefreshCcw } from 'lucide-react'
-import { User } from 'next-auth'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import React, { useCallback, useEffect, useState } from 'react'
@@ -25,7 +23,6 @@ const DashboadPage = () => {
 
   const handleDeleteMessage= async(messageId:string)=>{
     setMessages(messages.filter((message)=> message._id !== messageId))
-    await dbConnect()
     try {
       setIsLoading(true)
       const {data:res}=await axios.delete<ApiResponse>(`/api/delete-messages/${messageId}`)
@@ -54,7 +51,7 @@ const DashboadPage = () => {
   const acceptMessages=watch("isAcceptingMessage")
 
   const handleGetIsAcceptingMessage=useCallback(async ()=>{
-    await dbConnect()
+
     try {
       const {data:res}=await axios.get<ApiResponse>("/api/accept-messages")
       if(!res.success){
@@ -77,7 +74,7 @@ const DashboadPage = () => {
   },[setValue])
 
   const handleMessage= useCallback( async (refresh: boolean = false) => {
-    await dbConnect()
+
     try {
       setIsLoading(true)
       const {data:res}=await axios.get<ApiResponse>("/api/get-messages")
@@ -115,7 +112,6 @@ const DashboadPage = () => {
 
   // handle switch change
   const handleIsacceptingMessageChange = async()=>{
-    await dbConnect()
     try {
       const {data:res}=await axios.post<ApiResponse>("/api/accept-messages",{isAcceptingMessage:!acceptMessages})
       if(res.success){
@@ -137,8 +133,10 @@ const DashboadPage = () => {
     }
   }
 
-  const {username}= session?.user as User
-  const profileUrl = `${window.location.protocol}//${window.location.host}/u/${username}`
+  const username = session?.user.username
+  const protocol = window.location.protocol
+  const host =window.location.host
+  const profileUrl = `${protocol}//${host}/u/${username}`
 
   const copyToClipboard = ()=>{
     navigator.clipboard.writeText(profileUrl)
@@ -153,7 +151,7 @@ const DashboadPage = () => {
   }
 
   return (
-    <div className="my-8 mx-4 md:mx-8 lg:mx-auto p-6 bg-white rounded w-full max-w-6xl">
+    <div className="my-8  h-auto min-h-screen mx-4 md:mx-8 lg:mx-auto p-6 bg-white rounded w-full max-w-6xl">
       <h1 className="text-4xl font-bold mb-4">User Dashboard</h1>
 
       <div className="mb-4">
@@ -197,7 +195,7 @@ const DashboadPage = () => {
       </Button>
       <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
         {messages.length > 0 ? (
-          messages.map((message, index) => (
+          messages.map((message) => (
             <MessageCard
               key={message._id}
               message={message}
