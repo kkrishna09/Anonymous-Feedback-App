@@ -28,7 +28,8 @@ export const DELETE=async(request:NextRequest, {params}:{
             {_id:user?._id},
             {$pull:{messages:{_id:messageId}}}
         )
-        if(updatedResult.modifiedCount ==0){
+        console.log("updated  ",updatedResult)
+        if(updatedResult.modifiedCount==0){
             return NextResponse.json<ApiResponse>(
                 {
                     success:false,
