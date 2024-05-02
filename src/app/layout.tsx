@@ -4,8 +4,8 @@ import { Inter as FontSans } from "next/font/google"
 import { cn } from "@/lib/utils"
 import AuthProvider from "@/context/AuthProvider";
 import { Toaster } from "@/components/ui/toaster"
-import Navbar from "@/components/{my_component)/Navbar";
-import Footer from "@/components/{my_component)/Footer";
+import Navbar from "@/components/my_component/Navbar";
+import Footer from "@/components/my_component/Footer";
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",

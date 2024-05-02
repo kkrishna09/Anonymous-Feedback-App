@@ -5,7 +5,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -23,28 +22,15 @@ import {
 import { X } from "lucide-react";
 import { Button } from "../ui/button";
 import { Message } from "@/model/user.model";
-import axios from "axios";
-import { useToast } from "../ui/use-toast";
-import { ApiResponse } from "@/types/ApiResponse";
+
 type messageCardProps={
     message:Message,
     onMessageDelete:(messageId:string)=> void
 }
+
+
+
 function MessageCard({message, onMessageDelete}:messageCardProps) {
-
-    const {toast} = useToast()
-
-    const  handleDeleteConfirm= async ()=>{
-        const {data:res} =await axios.delete<ApiResponse>(`/api/delete-messages/${message._id}`)
-        toast({
-            title: res.success? "Deleted" : "Failed",
-            description:res.message,
-            variant:  res.success? "default": "destructive"
-        })
-        onMessageDelete(message._id)
-
-    }
-
   return (
     <Card className="card-bordered">
       <CardHeader>
@@ -66,7 +52,7 @@ function MessageCard({message, onMessageDelete}:messageCardProps) {
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={handleDeleteConfirm}>
+                <AlertDialogAction onClick={()=>{onMessageDelete(message._id)}}>
                   Continue
                 </AlertDialogAction>
               </AlertDialogFooter>
