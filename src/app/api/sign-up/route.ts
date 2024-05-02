@@ -69,7 +69,7 @@ export async function POST(request:NextRequest):Promise<NextResponse<ApiResponse
         return NextResponse.json<ApiResponse>(
             {
                 success:true,
-                message:"suceesfully signup"
+                message:"Verification Otp has been send to your email"
             },
             {status:200}
         )
