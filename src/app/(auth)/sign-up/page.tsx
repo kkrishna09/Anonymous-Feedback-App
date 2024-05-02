@@ -23,10 +23,9 @@ import { useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { debounce } from '@/helpers/debounce';
-
 let count=0
 function signUp(){
-    count++
+    count++;
     console.log(count)
     const [isUsernameUnique,setIsUsernameUnique]=useState({
         unique:false,
@@ -67,9 +66,10 @@ function signUp(){
 
     useEffect(()=>{
         const subscription=watch((values:any)=>{
-            if(values?.username?.length>6){
-                debounced(values.username)
-            }
+            // if(values?.username?.length>6){
+            //     debounced(values.username)
+            // }
+            debounced(values.username)
         })
         return ()=> subscription.unsubscribe()
     },[watch])
