@@ -15,7 +15,7 @@ export async function POST(request:NextRequest) {
                 {
                     success:false,
                     message:"user not found",
-                },{status:401}
+                },{status:200}
             )
         }
 
@@ -25,7 +25,7 @@ export async function POST(request:NextRequest) {
                 {
                     success:false,
                     message:"user is not accepting messages",
-                },{status:401}
+                },{status:200}
             )
         }
         const newMessage={content,createdAt:new Date()} 
