@@ -35,7 +35,7 @@ export default function otpVerification() {
                 description:res.message
             })
             if(res.success){
-                router.replace("/send-message")
+                router.replace("/dashboard")
             }
         } catch (error) {
             
