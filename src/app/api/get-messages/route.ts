@@ -21,22 +21,35 @@ export async function GET(request:NextRequest) {
         )
     }
     const user=session?.user
+    // TODO session user is an object
     const userId=new mongoose.Types.ObjectId(user._id)
     
 
     try {
+        const tempUser= await UserModel.findById(userId)
+        if (!(tempUser?.messages.length)){
+            console.log(tempUser?.messages)
+            return NextResponse.json<ApiResponse>(
+                {
+                    success:true,
+                    message:"No messages yet",
+                    messages:[]
+                },{status:200}
+            )
+        }
 
         const user=await UserModel.aggregate([
             {$match:{_id:userId}},
             {$unwind:"$messages"},
-            {$sort:{"$messages.createdAt":-1}},
+            {$sort:{"messages.createdAt":-1}},
             {$group:{_id:"$_id",messages:{$push:"$messages"}}}
         ])
+        // console.log(user)
         if(!user || user.length ===0){
             return NextResponse.json<ApiResponse>(
                 {
                     success:false,
-                    message:"user not found",
+                    message:"No message",
                     messages:[]
                 },{status:401}
             )
