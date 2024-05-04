@@ -12,7 +12,7 @@ export async function GET(request:NextRequest) {
     
     const session=await getServerSession(authOptions)
     console.log("session",session)
-    if(!session || !session.user){
+    if(!session || !session.user.isVerified){
         return NextResponse.json<ApiResponse>(
             {
                 success:false,
@@ -44,7 +44,7 @@ export async function GET(request:NextRequest) {
             {$sort:{"messages.createdAt":-1}},
             {$group:{_id:"$_id",messages:{$push:"$messages"}}}
         ])
-        // console.log(user)
+        
         if(!user || user.length ===0){
             return NextResponse.json<ApiResponse>(
                 {
