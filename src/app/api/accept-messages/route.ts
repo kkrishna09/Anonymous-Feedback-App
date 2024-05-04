@@ -9,7 +9,7 @@ export async function POST(request:NextRequest) {
     await dbConnect()
     
     const session=await getServerSession(authOptions)
-    if(!session || !session.user){
+    if(!session || !session.user.isVerified){
         return NextResponse.json<ApiResponse>(
             {
                 success:false,
@@ -58,7 +58,7 @@ export async function GET(request:NextRequest) {
     await dbConnect()
     
     const session=await getServerSession(authOptions)
-    if(!session || !session.user){
+    if(!session || !session.user.isVerified){
         return NextResponse.json<ApiResponse>(
             {
                 success:false,
