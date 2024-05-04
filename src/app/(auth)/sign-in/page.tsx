@@ -45,10 +45,10 @@ function signInPage(){
   async function onSubmit(values: z.infer<typeof signInSchema>) {
     setLoading(true)
     try {
-      const res =await signIn("credentials",{redirect:false,
+      const res =await signIn("credentials",{
         identifier:values.identifier,
-        password:values.password
-        
+        password:values.password,
+        redirect:false,
       })
       setLoading(false)
       console.log(res)
