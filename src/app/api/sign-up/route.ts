@@ -1,11 +1,9 @@
 import { sendverificationEmail} from "@/helpers/sendVerificationEmail"
 import dbConnect from "@/lib/db/dbConnect"
 import UserModel from "@/model/user.model"
-
 import { ApiResponse } from "@/types/ApiResponse"
 import bcrypt from 'bcryptjs'
 import { NextRequest, NextResponse } from "next/server"
-import jwt from "jsonwebtoken"
 export async function POST(request:NextRequest):Promise<NextResponse<ApiResponse>>{
     await dbConnect()
     try {
@@ -55,7 +53,6 @@ export async function POST(request:NextRequest):Promise<NextResponse<ApiResponse
         
         
         const emailResponse =await sendverificationEmail({email,username,otp:verifyCode})
-          console.log(emailResponse)
         if(!emailResponse.success){
             return NextResponse.json<ApiResponse>(
                 {
@@ -73,9 +70,6 @@ export async function POST(request:NextRequest):Promise<NextResponse<ApiResponse
             },
             {status:200}
         )
-        // const tokenData={userId:newUser._id}
-        // const token= jwt.sign(tokenData,process.env.TOKEN_SECRET!)
-        // response.cookies.set("token",token,{httpOnly:true})
         
     } catch (error) {
         console.error("error registering user", error)
