@@ -24,18 +24,22 @@ export const authOptions:NextAuthOptions={
                         ]
                     })
                     if (!user){
-                        return  new Error("user not found")
+                        console.log("user not found")
+                        return null
                     }
-                    if (user.isVerified){
-                        return new Error("user is not verified")
+                    if (!user.isVerified){
+                        console.log("user is not verified")
+                        return null
                     }
                     const IsPasswordCorrect=await bcrypt.compare(credentials.password,user.password)
                     if(!IsPasswordCorrect){
-                        return new Error("Password is incorrect")
+                         console.log("Password is incorrect")
+                        return null;
                     }
                     return user
                 } catch (err:any) {
-                    return new Error(err)
+                    console.log(err.message)
+                    return null
                 }
               }
         }),
