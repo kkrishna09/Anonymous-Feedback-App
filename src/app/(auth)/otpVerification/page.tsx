@@ -14,11 +14,11 @@ import { useRouter, useSearchParams } from 'next/navigation'
 let username:any;
 
 export default function OtpVerification() {
-    
+    const searchparams= useSearchParams()
     const {toast}=useToast()
     const router= useRouter()
     useEffect(()=>{
-        const searchparams= useSearchParams()
+        
     username = searchparams.get("username") || ""
     },[])
     
