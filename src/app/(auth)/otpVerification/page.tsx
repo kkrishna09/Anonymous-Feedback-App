@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot,} from "@/components/ui/input-otp"
  
 import { Button } from "@/components/ui/button"
@@ -11,17 +11,20 @@ import { ApiResponse } from '@/types/ApiResponse'
 import Link from 'next/link'
 
 import { useRouter, useSearchParams } from 'next/navigation'
-
+let username:any;
 
 export default function OtpVerification() {
-
+    
     const {toast}=useToast()
     const router= useRouter()
-    const searchparams= useSearchParams()
-    const username = searchparams.get("username") || ""
+    useEffect(()=>{
+        const searchparams= useSearchParams()
+    username = searchparams.get("username") || ""
+    },[])
     
     const [otpData,setOtpData]=useState({
         otp:"",
+        //@ts-ignore
         username
     })
     const handleSubmit=async()=>{
