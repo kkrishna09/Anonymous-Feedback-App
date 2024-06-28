@@ -25,7 +25,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
     const handleSubmit = async () => {
         try {
-            const { data: res } = await axios.post<ApiResponse>(`${process.env.DOMAIN}/api/otpVerification`, otpData);
+            const { data: res } = await axios.post<ApiResponse>(`/api/otpVerification`, otpData);
             console.log(res);
 
             toast({
