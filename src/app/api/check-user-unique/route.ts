@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import dbConnect from "@/lib/db/dbConnect";
 import UserModel from "@/model/user.model";
 import { usernameValidation } from "@/schemas/signUpSchema";
@@ -8,6 +9,7 @@ import { z } from "zod";
 const userValidationSchema= z.object({
     username:usernameValidation
 })
+
 
 export async function GET(request:NextRequest) {
     dbConnect()
