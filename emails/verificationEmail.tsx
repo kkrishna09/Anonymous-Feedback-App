@@ -39,7 +39,7 @@ export default function VerificationEmail({username,otp}:VeriificationEmailProps
             </Row>
             <Row>
                 <Text>
-                   {`${process.env.DOMAIN}otpVerification?username=${username}`}
+                   {`${process.env.DOMAIN}/otpVerification?username=${username}`}
                 </Text>
             </Row>
         </Section>

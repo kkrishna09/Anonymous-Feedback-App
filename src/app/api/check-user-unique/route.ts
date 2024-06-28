@@ -12,8 +12,8 @@ const userValidationSchema= z.object({
 export async function GET(request:NextRequest) {
     dbConnect()
     try {
-        const {searchParams}=request.nextUrl
-        const queryParams=searchParams.get("username")
+        const { searchParams } = new URL(request.url);
+        const queryParams = searchParams.get("username");
         // validation with zod
         if(!queryParams){
             return NextResponse.json<ApiResponse>(
