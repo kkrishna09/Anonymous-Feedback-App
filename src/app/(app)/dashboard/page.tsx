@@ -44,6 +44,7 @@ const DashboadPage = () => {
   }
 
   const{data:session}=useSession()
+  console.log(session)
   const form = useForm<z.infer<typeof acceptMessageSchema>>({
     resolver: zodResolver(acceptMessageSchema)
   })
@@ -147,7 +148,7 @@ const DashboadPage = () => {
   }
 
   if(!session || !session.user){
-    return <div>Please <Link href={"/sign-in"}>Sign In</Link></div>
+    return <div  className='h-screen flex justify-center items-center font-bold text-3xl '><Link href={"/sign-in"}>Please Sign In</Link></div>
   }
 
   return (

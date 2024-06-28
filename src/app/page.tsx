@@ -1,15 +1,16 @@
-"use client";
+"use client"
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel";
 
 import Autoplay from "embla-carousel-autoplay";
 import { Mail } from "lucide-react";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 const data = [
   {
@@ -29,7 +30,10 @@ const data = [
   },
 ];
 
-export default async function Home() {
+export default  function Home() {
+
+  const{data:session}=useSession()
+  const isUserAllowed = session?.user.isVerified
   return (
     <>
       {/* Main content */}
@@ -69,7 +73,11 @@ export default async function Home() {
             ))}
           </CarouselContent>
         </Carousel>
+        {isUserAllowed && <div>
+        <Link href={"/dashboard"}><Button>View Dashboard</Button></Link>
+        </div>}
       </main>
+      
     </>
   );
 }

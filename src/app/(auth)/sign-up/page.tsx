@@ -23,10 +23,9 @@ import { useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { debounce } from '@/helpers/debounce';
-let count=0
-function signUp(){
-    count++;
-    console.log(count)
+
+function SignUp(){
+    
     const [isUsernameUnique,setIsUsernameUnique]=useState({
         unique:false,
         message:""
@@ -101,7 +100,8 @@ function signUp(){
     }
   }
   return (
-    <div className='p-5 bg-white border border-var(--border) shadow-md absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'>
+    <div  className='min-h-screen'>
+        <div className='p-5 bg-white border border-var(--border) shadow-md absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'>
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="max-w-md mx-auto space-y-3">
                 <h1 className='text-center  text-black  text-3xl font-bold'>Anonymous-Feedback-App</h1>
@@ -157,7 +157,8 @@ function signUp(){
             </form>
         </Form>
   </div>
+    </div>
   )
 }
 
-export default signUp
+export default SignUp

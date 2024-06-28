@@ -13,7 +13,7 @@ import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 
-export default function otpVerification() {
+export default function OtpVerification() {
 
     const {toast}=useToast()
     const router= useRouter()
@@ -32,7 +32,8 @@ export default function otpVerification() {
 
             toast({
                 title:res.success?"Successful":"Failed",
-                description:res.message
+                description:res.message,
+                variant:res.success?"default":"destructive"
             })
             if(res.success){
                 router.replace("/dashboard")
@@ -42,7 +43,7 @@ export default function otpVerification() {
         }
     }
   return (
-
+    <div className='min-h-screen'>
     <div   className='flex flex-col gap-5 px-20 pt-16 pb-7 bg-white border border-var(--border) shadow-md absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'>
         <h1 className='text-center  text-black  text-3xl font-bold'>Anonymous-Feedback-App</h1>
         <h2 className="text-center  text-black  text-2xl font-bold">OTP Verification</h2>
@@ -70,6 +71,7 @@ export default function otpVerification() {
     </Button>
     </div>
     <div className='mt-4'>Did't Sign Up yet? <Link className="text-blue-500" href={"http://localhost:3000/sign-up"}>Sign Up</Link></div>
+    </div>
     </div>
   )
 }

@@ -35,7 +35,6 @@ export async function POST(request:NextRequest) {
                     success:false,
                     message:"incorrect OTP"
                 },
-                {status:400}
             )
         }
         const isVerifyCodeExpiry= new Date(user.verifyCodeExpiry)> new Date()

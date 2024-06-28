@@ -29,7 +29,7 @@ const parseStringMessages= (prompt:string): string[]=>{
     return prompt.split(specialChar)
 }
 const initialMessageString = "What's your favorite movie?||Do you have any pets?||What's your dream job?";
-const page = ({ params }: { params: { username: string } }) => {
+const Page = ({ params }: { params: { username: string } }) => {
     const {
         complete,
         completion,
@@ -157,4 +157,4 @@ const page = ({ params }: { params: { username: string } }) => {
   );
 };
 
-export default page;
+export default Page;
