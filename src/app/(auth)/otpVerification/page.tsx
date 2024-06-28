@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from "@/components/ui/input-otp";
 import { Button } from "@/components/ui/button";
 import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
@@ -10,7 +10,7 @@ import { ApiResponse } from '@/types/ApiResponse';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-export default function OtpVerification() {
+  function OtpVerification() {
     const searchParams = useSearchParams();
     const { toast } = useToast();
     const router = useRouter();
@@ -79,3 +79,13 @@ export default function OtpVerification() {
         </div>
     );
 }
+
+function OtpVerificationPage() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <OtpVerification />
+        </Suspense>
+    );
+}
+
+export default OtpVerificationPage;
